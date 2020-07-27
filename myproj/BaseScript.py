@@ -5,50 +5,53 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 
-exe_chrome_path = 'D:\personal\chromedriver_win32\chromedriver.exe'
-driver = webdriver.Chrome(exe_chrome_path)
+import time
 
-driver.get("https://pyramidcore.pyramidci.com/Security/PCILoginNew.aspx")
-driver.maximize_window()
-title = driver.title
-print(title)
+def setup():
+    exe_chrome_path = 'D:\personal\chromedriver_win32\chromedriver.exe'
+    driver = webdriver.Chrome(exe_chrome_path)
 
-username_field = driver.find_element_by_id("pydLogin_txtUserid")
-username_field.clear()
-username_field.send_keys("sourabh.agrawal")
+    driver.get("https://pyramidcore.pyramidci.com/Security/PCILoginNew.aspx")
+    driver.maximize_window()
+    title = driver.title
+    print(title)
 
-password_field = driver.find_element_by_id("pydLogin_txtUserPwd")
-password_field.clear()
-password_field.send_keys("Dec@2019")
+    username_field = driver.find_element_by_id("pydLogin_txtUserid")
+    username_field.clear()
+    username_field.send_keys("sourabh.agrawal")
 
-login_btn = driver.find_element_by_id("pydLogin_btnLogin")
-login_btn.click()
+    password_field = driver.find_element_by_id("pydLogin_txtUserPwd")
+    password_field.clear()
+    password_field.send_keys("Dec@2019")
 
-
-# Timesheet
-driver.get("https://pyramidcore.pyramidci.com/TS/PCItimesheet.aspx")
-title = driver.title
-print(title)
+    login_btn = driver.find_element_by_id("pydLogin_btnLogin")
+    login_btn.click()
 
 
-# Date - txtDate
-date_element = driver.find_element_by_id("txtDate")
-print(str(date_element.get_attribute('value')))
-
-# Master Project - ddlMstrProj
-master_project_element = driver.find_element_by_id("ddlMstrProj")
-select = Select(master_project_element)
-master_project_value = select.first_selected_option.text
-print (master_project_value)
-
-if master_project_value.lower() == 'weekend':
-    submit_timesheet_for_weekend()
-
-else:
-    submit_timesheet_for_weekday()
+    # Timesheet
+    driver.get("https://pyramidcore.pyramidci.com/TS/PCItimesheet.aspx")
+    title = driver.title
+    print(title)
 
 
-def submit_timesheet_for_weekday():
+    # Date - txtDate
+    date_element = driver.find_element_by_id("txtDate")
+    print(str(date_element.get_attribute('value')))
+
+    # Master Project - ddlMstrProj
+    master_project_element = driver.find_element_by_id("ddlMstrProj")
+    select = Select(master_project_element)
+    master_project_value = select.first_selected_option.text
+    print (master_project_value)
+
+    if master_project_value.lower() == 'weekend':
+        submit_timesheet_for_weekend(driver)
+
+    else:
+        for_weekday(driver)
+
+
+def for_weekday(driver):
     # Project - ddlProject
     project_element = driver.find_element_by_id("ddlProject")
     select = Select(project_element)
@@ -69,13 +72,24 @@ def submit_timesheet_for_weekday():
     select = Select(group_element)
     select.select_by_visible_text('Quality')
 
+    
+    time.sleep(3)
     # Activity - ddlActivity
     activity_element = driver.find_element_by_id("ddlActivity")
     select = Select(activity_element)
     select.select_by_visible_text('QA & Testing')
+    print(select.first_selected_option.text)
+
+    hours_element = driver.find_element_by_id("ddlHour")
+    select = Select(hours_element)
+    select.select_by_visible_text('8')
+    print(select.first_selected_option.text)
+
+    save_and_submit(driver)
+    
 
 
-def submit_timesheet_for_weekend():
+def submit_timesheet_for_weekend(driver):
     # Project - ddlProject
     project_element = driver.find_element_by_id("ddlProject")
     select = Select(project_element)
@@ -106,6 +120,10 @@ def submit_timesheet_for_weekend():
     select = Select(hours_element)
     print(select.first_selected_option.text)
 
+    save_and_submit(driver)
+
+
+def save_and_submit(driver):
     # Add button
     add_element = driver.find_element_by_id("btnAdd")
     add_element.click()
@@ -136,3 +154,7 @@ def submit_timesheet_for_weekend():
     message_element = driver.find_element_by_id("lblmsg")
     print(message_element.text)
 
+
+
+if __name__ == "__main__":
+    setup()
