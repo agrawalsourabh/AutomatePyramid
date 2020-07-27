@@ -38,37 +38,101 @@ print(str(date_element.get_attribute('value')))
 # Master Project - ddlMstrProj
 master_project_element = driver.find_element_by_id("ddlMstrProj")
 select = Select(master_project_element)
-print (select.first_selected_option.text)
+master_project_value = select.first_selected_option.text
+print (master_project_value)
 
-# Project - ddlProject
-project_element = driver.find_element_by_id("ddlProject")
-select = Select(project_element)
-print(select.first_selected_option.text)
+if master_project_value.lower() == 'weekend':
+    submit_timesheet_for_weekend()
 
-# Features - ddlFeature
-features_element = driver.find_element_by_id("ddlFeature")
-select = Select(features_element)
-print(select.first_selected_option.text)
+else:
+    submit_timesheet_for_weekday()
 
-# Ticket No - ddlTicketNo
-ticket_no_element = driver.find_element_by_id("ddlTicketNo")
-select = Select(ticket_no_element)
-print(select.first_selected_option.text)
 
-# Group - ddlGroup
-group_element = driver.find_element_by_id("ddlGroup")
-select = Select(group_element)
-print(select.first_selected_option.text)
+def submit_timesheet_for_weekday():
+    # Project - ddlProject
+    project_element = driver.find_element_by_id("ddlProject")
+    select = Select(project_element)
+    select.select_by_visible_text('EMC-QA')
 
-# Activity - ddlActivity
-activity_element = driver.find_element_by_id("ddlActivity")
-select = Select(activity_element)
-print(select.first_selected_option.text)
+    # Features - ddlFeature
+    features_element = driver.find_element_by_id("ddlFeature")
+    select = Select(features_element)
+    select.select_by_visible_text('BOP')
 
-# hours - ddlHour
-hours_element = driver.find_element_by_id("ddlHour")
-select = Select(hours_element)
-print(select.first_selected_option.text)
+    # Ticket No - ddlTicketNo
+    ticket_no_element = driver.find_element_by_id("ddlTicketNo")
+    select = Select(ticket_no_element)
+    select.select_by_visible_text('Testing BOP')
 
-# Add button
-add_element = driver.find_element_by_id("btnAdd")
+    # Group - ddlGroup
+    group_element = driver.find_element_by_id("ddlGroup")
+    select = Select(group_element)
+    select.select_by_visible_text('Quality')
+
+    # Activity - ddlActivity
+    activity_element = driver.find_element_by_id("ddlActivity")
+    select = Select(activity_element)
+    select.select_by_visible_text('QA & Testing')
+
+
+def submit_timesheet_for_weekend():
+    # Project - ddlProject
+    project_element = driver.find_element_by_id("ddlProject")
+    select = Select(project_element)
+    print(select.first_selected_option.text)
+
+    # Features - ddlFeature
+    features_element = driver.find_element_by_id("ddlFeature")
+    select = Select(features_element)
+    print(select.first_selected_option.text)
+
+    # Ticket No - ddlTicketNo
+    ticket_no_element = driver.find_element_by_id("ddlTicketNo")
+    select = Select(ticket_no_element)
+    print(select.first_selected_option.text)
+
+    # Group - ddlGroup
+    group_element = driver.find_element_by_id("ddlGroup")
+    select = Select(group_element)
+    print(select.first_selected_option.text)
+
+    # Activity - ddlActivity
+    activity_element = driver.find_element_by_id("ddlActivity")
+    select = Select(activity_element)
+    print(select.first_selected_option.text)
+
+    # hours - ddlHour
+    hours_element = driver.find_element_by_id("ddlHour")
+    select = Select(hours_element)
+    print(select.first_selected_option.text)
+
+    # Add button
+    add_element = driver.find_element_by_id("btnAdd")
+    add_element.click()
+
+    # Save button - btnSave
+    wait = WebDriverWait(driver, 30)
+    element = wait.until(EC.element_to_be_clickable((By.ID, 'btnSave')))
+    save_btn = driver.find_element_by_id("btnSave")
+    save_btn.click()
+
+    # check successfully message - lblmsg
+    wait = WebDriverWait(driver, 30)
+    element = wait.until(EC.element_to_be_clickable((By.ID, 'lblmsg')))
+    message_element = driver.find_element_by_id("lblmsg")
+    print(message_element.text)
+
+    # Submit Button - btnSubmit
+    submit_btn = driver.find_element_by_id("btnSubmit")
+    submit_btn.click()
+
+    # Handling alert
+    alert_obj = driver.switch_to.alert
+    alert_obj.accept()
+
+    # Read message after submiting the timesheet.
+    wait = WebDriverWait(driver, 30)
+    element = wait.until(EC.element_to_be_clickable((By.ID, 'lblmsg')))
+    message_element = driver.find_element_by_id("lblmsg")
+    print(message_element.text)
+
