@@ -30,19 +30,34 @@ def fill_attendance():
     print("Rows: " + str(row_count))
     print("Column: " + str(column_count))
     
-    if(row_count == 0):
-        raise Exception("Row number starts from 1")
+    # //*[@id="dgIssueList"]/tbody/tr[2]/td[2]
 
-    row_count = row_count + 1
-    row = table[1].find_elements_by_xpath("//tr["+str(row_count)+"]/td")
-    print(len(row))
-    # rData = []
-    # for webElement in row :
-    #     rData.append(webElement.text)
+    for r in range(row_count):
 
-    # print(rData)
+        if r > 0:
+            date_xpath = "//*[@id='dgIssueList']/tbody/tr[" + str(r+1) + "]/td[2]"
+            row = driver.find_element_by_xpath(date_xpath)
+            date_text = row.text
+            print(date_text)
+
+            if r < 9:
+                in_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateIn"
+                out_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateOut"
+
+            else:
+                in_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateIn"
+                out_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateOut"
 
 
+            in_date = driver.find_element_by_id(in_date_id)
+            in_date.send_keys(date_text)
+
+            out_date = driver.find_element_by_id(out_date_id)
+            out_date.send_keys(date_text)
+
+        
+    
+    
 
 if __name__ == "__main__":
     fill_attendance()
