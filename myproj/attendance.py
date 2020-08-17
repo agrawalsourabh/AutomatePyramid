@@ -29,31 +29,54 @@ def fill_attendance():
 
     print("Rows: " + str(row_count))
     print("Column: " + str(column_count))
+
+    window_attendance = driver.window_handles[0]
     
     # //*[@id="dgIssueList"]/tbody/tr[2]/td[2]
 
-    for r in range(row_count):
+    # for r in range(row_count):
 
-        if r > 0:
-            date_xpath = "//*[@id='dgIssueList']/tbody/tr[" + str(r+1) + "]/td[2]"
-            row = driver.find_element_by_xpath(date_xpath)
-            date_text = row.text
-            print(date_text)
+    #     if r > 0:
+    #         date_xpath = "//*[@id='dgIssueList']/tbody/tr[" + str(r+1) + "]/td[2]"
+    #         row = driver.find_element_by_xpath(date_xpath)
+    #         date_text = row.text
+    #         print(date_text)
 
-            if r < 9:
-                in_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateIn"
-                out_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateOut"
+    #         if r < 9:
+    #             in_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateIn"
+    #             out_date_id = "dgIssueList_ctl0" + str(r+1) + "_txtDateOut"
 
-            else:
-                in_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateIn"
-                out_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateOut"
+    #         else:
+    #             in_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateIn"
+    #             out_date_id = "dgIssueList_ctl" + str(r+1) + "_txtDateOut"
 
 
-            in_date = driver.find_element_by_id(in_date_id)
-            in_date.send_keys(date_text)
+    #         in_date = driver.find_element_by_id(in_date_id)
+    #         in_date.send_keys(date_text)
 
-            out_date = driver.find_element_by_id(out_date_id)
-            out_date.send_keys(date_text)
+    #         out_date = driver.find_element_by_id(out_date_id)
+    #         out_date.send_keys(date_text)
+
+    
+    # dgIssueList_ctl02_imgDateIn
+
+    calender_id = "dgIssueList_ctl02_imgDateIn"
+    calender_btn = driver.find_element_by_id(calender_id)
+    calender_btn.click()
+
+    window_calender = driver.window_handles[1]
+
+    driver.switch_to.window(window_calender)
+    
+    window_calender_title = driver.title
+
+    print(window_calender_title)
+
+    # inside calendar
+
+    calendar_tables = driver.find_elements_by_tag_name('table')
+    
+    print(len(calendar_tables))
 
         
     
@@ -61,3 +84,5 @@ def fill_attendance():
 
 if __name__ == "__main__":
     fill_attendance()
+    while True:
+        pass
